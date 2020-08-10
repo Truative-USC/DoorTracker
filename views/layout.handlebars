@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login App</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+≠≠≠
+<body>
+    <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+            <div class="cover-container">
+                <div class="masthead clearfix">
+                    <div class="inner">
+                        <h3 class="masthead-brand">OZC</h3>
+                        <nav class="nav nav-masthead">
+                            <a class="nav-link active" href="/">Dashboard</a>
+                           <!--  <a class="nav-link" href="/users/login">Login</a>
+                            <a class="nav-link" href="/users/register">Register</a>
+                            <a class="nav-link" href="#">Logout</a> -->
+                        </nav>
+                    </div>
+                </div>
+                <div class="inner cover">
+                    {{#if success_msg}}
+                    <div class="alert alert-success">{{success_msg}}</div>
+                    {{/if}} {{#if error_msg}}
+                    <div class="alert alert-danger">{{error_msg}}</div>
+                    {{/if}} {{#if error}}
+                    <div class="alert alert-danger">{{error}}</div>
+                    {{/if}} 
+                    {{{body}}}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

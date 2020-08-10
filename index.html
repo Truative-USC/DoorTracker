@@ -1,0 +1,169 @@
+<html>
+
+<head>
+    <script src="date-and-time.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/my.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.js"></script>
+    <script src="client.js"></script>
+    <link rel="stylesheet" type="text/css" src="css.css"> 
+
+    <title>Push notification server streaming on a MySQL db</title>
+    <style>
+    .jsgrid-alt-row>.jsgrid-cell {
+        background-color: #efeaea;
+    }
+
+    dd,
+    dt {
+        float: left;
+        margin: 0;
+        padding: 5px;
+        clear: both;
+        display: block;
+        width: 100%;
+    }
+
+    dt {
+        background: #ddd;
+    }
+
+    time {
+        color: gray;
+    }
+
+    #logo {
+
+        padding-top: 20px;
+        width: 140px;
+        text-align: center;
+        display: block;
+        margin: auto;
+    }
+
+    html,
+    body {
+        height: 100% margin-top:10px;
+    }
+
+    html {
+        display: table;
+        margin: auto;
+    }
+
+    body {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    #AMPM {
+        float: right;
+    }
+
+    #myButton {
+        float: center;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="Clouds">
+        <div class="Cloud Foreground"></div>
+        <div class="Cloud Background"></div>
+        <div class="Cloud Foreground"></div>
+        <div class="Cloud Background"></div>
+        <div class="Cloud Foreground"></div>
+        <div class="Cloud Background"></div>
+        <div class="Cloud Background"></div>
+        <div class="Cloud Foreground"></div>
+        <div class="Cloud Background"></div>
+        <div class="Cloud Background"></div>
+        <!--  <svg viewBox="0 0 40 24" class="Cloud"><use xlink:href="#Cloud"></use></svg>-->
+    </div>
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="40px" height="24px" viewBox="0 0 40 24" enable- xml:space="preserve">
+  <defs>
+    <path id="Cloud" d="M33.85,14.388c-0.176,0-0.343,0.034-0.513,0.054c0.184-0.587,0.279-1.208,0.279-1.853c0-3.463-2.809-6.271-6.272-6.271
+    c-0.38,0-0.752,0.039-1.113,0.104C24.874,2.677,21.293,0,17.083,0c-5.379,0-9.739,4.361-9.739,9.738
+    c0,0.418,0.035,0.826,0.084,1.229c-0.375-0.069-0.761-0.11-1.155-0.11C2.811,10.856,0,13.665,0,17.126
+    c0,3.467,2.811,6.275,6.272,6.275c0.214,0,27.156,0.109,27.577,0.109c2.519,0,4.56-2.043,4.56-4.562
+    C38.409,16.43,36.368,14.388,33.85,14.388z"/>
+  </defs>
+</svg>
+    <img id="logo" align="middle" src="https://www.opticalzonu.com/wp-content/uploads/2018/02/ozc_logo_lg-trans.png" alt="logo"></img>
+    <br />
+    <br />
+    <h1>Employee Checker</h1>
+    <!-- <div id="container"></div> -->
+    <div>
+        <time></time>
+        <timeTwo id="AMPM"></timeTwo>
+    </div>
+    <table id="jsGrid"></table>
+    <!--     <div id="container">Loading ...</div> -->
+    <button id="myButton">Click me!</button>
+    <script>
+    swal("Welcome to Emoployee Checker");
+
+    // create a new websocket
+    var socket = io.connect('http://localhost:8000');
+
+    // on message received we print all the data inside the #container div
+    socket.on('notification', function(data) {
+
+        var userList = [];
+        // var usersList = "<dl>";
+        $.each(data.users, function(index, user) {
+            // usersList += "<dt>" + user.card + user.fname + " " 
+            //     user.lname + " " + user.state + "</dt>\n"
+            // console.log("USER DATA: " + user)
+            userList.push(user);
+        });
+        // $('#container').html(userList);
+
+        $("#jsGrid").jsGrid({
+            width: "auto",
+            height: "auto",
+            data: userList,
+            altRows: true,
+            filtering: true,
+
+
+            fields: [
+                { name: "idUsers", title: "ID", type: "number", width: 50 },
+                { name: "fname", title: "First Name", type: "text", width: 200 },
+                { name: "lname", title: "Last Name", type: "text", width: 200 },
+                { name: "card", title: "Card", type: "number", width: 100 },
+                { name: "state", type: "text", title: "Last Event", width: 50 },
+                { name: "timeStamp", title: "Time", type: "text", width: 200 }
+
+
+            ],
+            gridComplete: function() {
+                var rows = $("#jsGrid").getDataIDs();
+                for (var i = 0; i < rows.length; i++) {
+                    var state = $("#JsGrid").getCell(rows[i], "state");
+                    if (state == "EXIT") {
+                        $("#jsGrid").jqGrid('setRowData', rows[i], false, {
+                            color: 'white',
+                            weightfont: 'bold',
+                            background: 'blue'
+                        });
+                    }
+                }
+            }
+        });
+        $('time').html('Last Update:' + data.time);
+
+        $('timeTwo').html('Last Update:' + data.timeTwo);
+
+    });
+    </script>
+</body>
+
+</html>

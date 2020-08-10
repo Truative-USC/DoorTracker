@@ -1,0 +1,37 @@
+{
+  "name": "nodejs-MySQL-push-notifications-demo",
+  "version": "1.0.0",
+  "description": "nodejs-MySQL-push-notifications-demo",
+  "main": "server.js",
+  "dependencies": {
+    "alertify": "^0.3.0",
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "date-and-time": "^0.6.2",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "jquery": "^3.3.1",
+    "lesshat": "^4.1.0",
+    "mongodb": "*",
+    "mongoose": "*",
+    "mysql": "^2.15.0",
+    "node-datetime": "^2.0.6",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*",
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^2.1.1",
+    "sweetalert": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+
+}
